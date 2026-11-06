@@ -1,0 +1,43 @@
+---
+layout: runbook
+title: '#4471 · split into two causes'
+owner: harness
+status: draft
+reviewed: 2026-11-06
+signature: v1.eyJzdWIiOiI4MzI5IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTM5NzczNjgsImV4cCI6MTc5NDA2Mzc2OH0.dbMNcdWouzHMw_2B_7DaYgxmGDBeZ0cCgbdEZvH0X0A
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+
+  // Same value as frontmatter `signature:` — the course ticket that signs this page.
+  const signature =
+    'v1.eyJzdWIiOiI4MzI5IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTM5NzczNjgsImV4cCI6MTc5NDA2Mzc2OH0.dbMNcdWouzHMw_2B_7DaYgxmGDBeZ0cCgbdEZvH0X0A';
+</script>
+
+Ticket **#4471** merged **412** unique reports (export had 427 rows; 15 were the same id twice). The desk marked it known as one parser bug. The kb's own cause logic says otherwise.
+
+<Callout>
+Two causes share this ticket. Each needs its own ticket and its own fix.
+</Callout>
+
+## What was merged
+
+<CauseTable ticket={4471} />
+
+## Problems filed
+
+1. **parser** — 379 reports → GitHub issue #1. Shared parser reads month first; day-first tenants get flipped dates. Channels: app, email, and booking-v2 forms.
+2. **hint** — 33 reports → GitHub issue #2. booking-v3 prints `MM/DD/YYYY` under the date field; day-first tenants still type day first, so the form stores the wrong day. Only form channel; tenants alder.physio, copper.studio, pale.harbour.
+
+Five more reports in desk notes were read as a one-day move. By tenant they still classify as `parser`, so they stay counted there and are footnoted on the table above — they are not a third cause in `causes.ts`.
+
+## Lessons
+
+- Merge on subject alone packs different bugs into one ticket.
+- Intake tags (`parser` / `hint`) disagree with tenant cause often; trust tenant locale and form, not the tag.
+- A number the page can compute belongs in a component: see `CauseTable`.
+
+<RenderStamp {signature} />
